@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Formulario de Clasificación de Activos de Información</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+
+<body>
+    <header>
+        <h1>Formulario de Clasificación de Activos de Información</h1>
+        <button id="infoBtn"><i class="fas fa-angle-up" id="infoBtn_icon"></i></button>
+        <!-- El Modal -->
+        <div class="content show" id="information_content">
+            <p>El objetivo de esta evaluación es clasificar los activos de información y determinar la mejor forma
+                de
+                proteger los
+                activos de información de la empresa.<br>
+                Los activos de información son manejados a través de aplicativos (Sw) que permiten el acceso y
+                procesamiento de la
+                misma, en este sentido es importante evaluar el impacto a su confidencialidad, integridad y
+                disponibilidad.<br>
+                Los niveles de clasificación se aplican como: <b>Confidencial o crítico</b>, <b>Uso interno o
+                    privado</b> y <b>Público o general,</b><br><br>
+                Los niveles de evaluación se efectúan bajo los criterios de seguridad: Confidencialidad, Integridad
+                y
+                Disponibilidad
+                de la información contenida, procesada y/o administrada por los aplicativos para determinar los
+                mecanismos
+                de control adecuados para su protección, manipulación y acceso.</p>
+        </div>
+    </header>
+    <main>
+        <form id="classificationForm">
+            <section>
+                <h2 class="title_blue">Información</h2>
+                <div class="container_row">
+                    <div class="container_row">
+                        <label for="system">Aplicativo / Sistema:</label>
+                        <input type="text" id="system" name="system">
+                    </div>
+                    <div class="container_row margin_left">
+                        <label for="owner">Propietario:</label>
+                        <input type="text" id="owner" name="owner">
+                    </div>
+                </div>
+                <label for="authorizer">Autorizador:</label>
+                <input type="text" id="authorizer" name="authorizer">
+
+                <label for="description">Descripción:</label>
+                <textarea id="description" name="description" placeholder="Descripción del sistema"></textarea>
+            </section>
+            <p>Se detallan a continuación una serie de escenarios, ubique su evaluación en función al nivel
+                de riesgo</p>
+            <section>
+                <div class="title_information">
+                    <div class="container_row title">
+                        <h2>Confidencialidad</h2>
+                    </div>
+                    <p>PUNTUACION: <span id="confidentiality_score" class="score margin margin_left">0</span></p>
+                    <br>
+                    <p>Considere la siguiente pregunta con relación a cada escenario planteado para el activo de
+                        información
+                    </p>
+                    <p> <b>"Si esta información llegara a ser conocida por individuos no autorizados o incluso hecha
+                            pública":</b>
+                    </p>
+                </div>
+
+                <div class="grid-container confidentiality_questions">
+                </div>
+            </section>
+
+            <section>
+                <div class="title_information">
+                    <div class="container_row title">
+                        <h2>Integridad</h2>
+                    </div>
+                    <p>PUNTUACION: <span id="integrity_score" class="score margin_left">0</span></p>
+                    <br>
+                    <p>Considere la siguiente pregunta con relación a cada escenario planteado para el activo de
+                        información
+                    </p>
+                    <p> <b>"Si esta información llegara a ser indebida o inadecuadamente alterada, actualizada o
+                            modificada,
+                            ya sea intencionalmente o por accidente":</b>
+                    </p>
+                </div>
+                <div class="grid-container integrity_questions">
+                </div>
+            </section>
+
+            <section>
+                <div class="title_information">
+                    <div class="container_row title">
+                        <h2>Disponibilidad</h2>
+                    </div>
+                    <p>PUNTUACION: <span id="availability_score" class="score margin_left">0</span></p>
+                    <br>
+                    <p>Considere la siguiente pregunta con relación a cada escenario planteado para el activo de
+                        información
+                    </p>
+                    <p> <b>"Si esta información llegara a no estar disponible permanentemente o por un periodo
+                            considerable
+                            de tiempo" :</b>
+                    </p>
+                </div>
+                <div class="grid-container availability_questions">
+                </div>
+            </section>
+
+            <section>
+                <div class="title_information">
+                    <div class="container_row title">
+                        <h2>Privacidad</h2>
+                    </div>
+                    <p>PUNTUACION: <span id="privacy_score" class="score margin_left">0</span></p>
+                    <br>
+                    <p>
+                        Evalúe la siguiente pregunta con relación a cada escenario planteado para el activo de
+                        información
+                        tomando
+                        en cuenta las siguientes <b>Consideraciones</b>:
+                    </p>
+                    <h3>
+                        Información de clientes:
+                    </h3>
+                    <p>
+                        La información es demográfica o propia del cliente, si contiene cualquier dato que por sí mismo
+                        pueda
+                        ser
+                        usado (sin tener que consultar otro activo de información) para identificar a un cliente de
+                        manera
+                        individualizada; ya sea este cliente una persona, una empresa, etc. Ejemplos : Nombre o Razón
+                        Social,
+                        Número de Teléfono, Carnet de Identidad, etc.
+                    </p>
+                    <br>
+                    <p>
+                        La información es anónima si no identifica de manera específica a una persona natural /
+                        jurídica.
+                        Ejemplos :
+                        Número de tarjeta de débito, Identificador de Transacción, etc. Es decir, para identificar y/o
+                        conocer
+                        atributos propios del cliente, es necesario cruzarla contra otro activo de información de la
+                        Empresa; o
+                        si
+                        se trata de información sumarizada. Ejemplo : Movimientos totalizados, cantidad de
+                        transacciones,
+                        histórico de movimientos, extracto, etc.
+                    </p>
+                </div>
+                <div class="grid-container privacy_questions">
+                </div>
+            </section>
+            <div class="center_container">
+                <input type="submit" value="Clasificar" class="form_button">
+            </div>
+        </form>
+        <p>Clasificación: <span id="final_classification">No clasificado</span></p>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Nova+Mono&family=Red+Hat+Mono:wght@300;400;500;600;700&display=swap');
+
+/*Global variables*/
+:root {
+    --primary-color: #0d54a1;
+    --secondary-color: #5c9ee4;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Nova Mono', monospace;
+    font-family: 'Red Hat Mono', monospace;
+}
+
+form {
+    margin: 20px;
+}
+
+label,
+input {
+    display: block;
+    margin: 10px 0;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    background-image: url('../assets/18971.jpg');
+    background-size: cover;
+    color: var(--primary-color);
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+    min-height: 100vh;
+}
+header h1 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Estilo del botón */
+#infoBtn {
+    margin-top: 10px;
+    font-size: 24px;
+    color: var(--primary-color);
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.content {
+    padding: 10px;
+    margin-top: 10px;
+    max-height: 0;
+    text-align: justify;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 1s ease-out;
+}
+
+.content.show {
+    opacity: 1;
+    padding: 15px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    max-height: 500px;
+}
+
+main{
+    padding: 20px;
+}
+
+
+.container_column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container_row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.center_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.margin_left{
+    margin-left: 15px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: 10px;
+    padding: 10px;
+}
+
+.header_form {
+    padding: 10px;
+    font-weight: bold;
+    color: white;
+    background-color: var(--primary-color);
+    border-radius: 7px;
+    margin-bottom: 12px;
+}
+
+.content_form {
+    padding: 10px;
+    margin-bottom: 12px;
+}
+
+.code {
+    text-transform: uppercase;
+}
+
+input, select {
+    font-family: 'Nova Mono', monospace;
+    font-family: 'Red Hat Mono', monospace;
+    margin: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+option{
+    font-family: 'Nova Mono', monospace;
+    font-family: 'Red Hat Mono', monospace;
+}
+
+input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+}
+
+section{
+    margin: 20px;
+}
+
+.title{
+    font-weight: bold;
+    color: white;
+    margin-bottom: 12px;
+}
+
+.title_blue{
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+.title_information{
+    background-color: var(--primary-color);
+    padding: 20px;
+    color: white;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.score{
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+.form_button{
+    margin-top: 20px;
+    padding: 15px;
+    color: white;
+    background-color: var(--primary-color);
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.form_button:hover{
+    transform: scale(1.1);
+}
+
+#final_classification {
+    color: white;
+    font-size: 24px; /* Aumenta el tamaño de la fuente */
+    font-weight: bold; /* Usa negrita para resaltar el texto */
+    background-color: var(--primary-color); /* Añade un fondo de color contrastante */
+    padding: 10px; /* Añade padding para dar espacio alrededor del texto */
+    border-radius: 5px; /* Añade bordes redondeados para una apariencia suave */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3); /* Añade una sombra para dar profundidad */
+  }
