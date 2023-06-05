@@ -34,7 +34,7 @@ header {
     justify-content: center;
     text-align: center;
     padding: 20px;
-    background-image: url('../assets/18971.jpg');
+    background-image: url('./assets/18971.jpg');
     background-size: cover;
     color: var(--primary-color);
     border-top-left-radius: 40px;
@@ -204,3 +204,21 @@ section{
     border-radius: 5px; /* Añade bordes redondeados para una apariencia suave */
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3); /* Añade una sombra para dar profundidad */
   }
+
+  .pdf-button {
+    background-color: #1234a5;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    transition: transform 0.3s ease;
+  }
+  
+  .pdf-button:hover {
+    transform: scale(1.1);
+  }
+  

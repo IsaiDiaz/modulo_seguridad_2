@@ -117,7 +117,6 @@ function calculateAvailabilityScore(answers){
     return score;
 }
 
-
 //Generar preguntas
 generateQuestion(confidentiality_data, 'confidentiality_questions', options_main);
 generateQuestion(availability_data, 'availability_questions', options_main);
@@ -186,6 +185,124 @@ document.getElementById('classificationForm').addEventListener('submit', functio
     console.log(privacy_scores);
 
 });
+
+document.getElementById('savePdfBtn').addEventListener('click', function() {
+    // Crea un nuevo objeto jsPDF
+    const doc = new jsPDF();
+  
+    // Agrega el título del formulario al PDF
+    doc.setFontSize(18);
+    doc.text('Formulario de Clasificación de Activos de Información', 10, 10);
+  
+    // Valor de desplazamiento vertical inicial
+    let y = 20; 
+
+    // Agrega el nombre del sistema al PDF, propietaio y autorizador
+    doc.setFontSize(12);
+    doc.setFontSize(12);
+
+    // Sistema
+    doc.text('Sistema:', 10, y);
+    const systemTextLines = doc.splitTextToSize(document.getElementById('system').value, 180);
+    doc.text(systemTextLines, 25, y);
+    y += (systemTextLines.length * 5) + 5;
+    
+    // Propietario
+    doc.text('Propietario:', 10, y);
+    const ownerTextLines = doc.splitTextToSize(document.getElementById('owner').value, 180);
+    doc.text(ownerTextLines, 25, y);
+    y += (ownerTextLines.length * 5) + 5;
+    
+    // Autorizador
+    doc.text('Autorizador:', 10, y);
+    const authorizerTextLines = doc.splitTextToSize(document.getElementById('authorizer').value, 180);
+    doc.text(authorizerTextLines, 25, y);
+    y += (authorizerTextLines.length * 5) + 5;
+    
+  
+    // Obtiene las respuestas y clasificación del formulario
+    const confidentiality_scores = getScores(confidentiality_data);
+    const availability_scores = getScores(availability_data);
+    const integrity_scores = getScores(integrity_data);
+    const privacy_scores = getScores(privacy_data);
+    const classification = document.getElementById('final_classification').innerText;
+  
+    // Agrega las respuestas y clasificación al PDF
+    doc.setFontSize(12);
+
+    // Confidencialidad
+    doc.text('Confidencialidad:', 10, y);
+    y += 10; // Aumenta el desplazamiento vertical
+    confidentiality_data.forEach(function(item) {
+      const textLines = doc.splitTextToSize(`${item.question} - Respuesta: ${options_main.find(option => option.value === confidentiality_scores[item.code]).text}`, 180);
+      
+      if (y + (textLines.length * 5) + 5 > doc.internal.pageSize.height) {
+        doc.addPage();
+        y = 20; // Reinicia el desplazamiento vertical en la nueva página
+      }
+      
+      doc.text(textLines, 15, y);
+      y += (textLines.length * 5) + 5; // Aumenta el desplazamiento vertical en función del número de líneas del texto
+    });
+  
+    // Disponibilidad
+    doc.text('Disponibilidad:', 10, y);
+    y += 10; // Aumenta el desplazamiento vertical
+    availability_data.forEach(function(item) {
+      const textLines = doc.splitTextToSize(`${item.question} - Respuesta: ${options_main.find(option => option.value === availability_scores[item.code]).text}`, 180);
+      
+      if (y + (textLines.length * 5) + 5 > doc.internal.pageSize.height) {
+        doc.addPage();
+        y = 20; // Reinicia el desplazamiento vertical en la nueva página
+      }
+      
+      doc.text(textLines, 15, y);
+      y += (textLines.length * 5) + 5; // Aumenta el desplazamiento vertical en función del número de líneas del texto
+    });
+  
+    // Integridad
+    doc.text('Integridad:', 10, y);
+    y += 10; // Aumenta el desplazamiento vertical
+    integrity_data.forEach(function(item) {
+      const textLines = doc.splitTextToSize(`${item.question} - Respuesta: ${options_main.find(option => option.value === integrity_scores[item.code]).text}`, 180);
+      
+      if (y + (textLines.length * 5) + 5 > doc.internal.pageSize.height) {
+        doc.addPage();
+        y = 20; // Reinicia el desplazamiento vertical en la nueva página
+      }
+      
+      doc.text(textLines, 15, y);
+      y += (textLines.length * 5) + 5; // Aumenta el desplazamiento vertical en función del número de líneas del texto
+    });
+  
+    // Privacidad
+    doc.text('Privacidad:', 10, y);
+    y += 10; // Aumenta el desplazamiento vertical
+    privacy_data.forEach(function(item) {
+      const textLines = doc.splitTextToSize(`${item.question} - Respuesta: ${options_secondary.find(option => option.value === privacy_scores[item.code]).text}`, 180);
+      
+      if (y + (textLines.length * 5) + 5 > doc.internal.pageSize.height) {
+        doc.addPage();
+        y = 20; // Reinicia el desplazamiento vertical en la nueva página
+      }
+      
+      doc.text(textLines, 15, y);
+      y += (textLines.length * 5) + 5; // Aumenta el desplazamiento vertical en función del número de líneas del texto
+    });
+  
+    // Clasificación final
+    doc.text('Clasificación Final:', 10, y);
+    y += 10; // Aumenta el desplazamiento vertical
+    doc.text(`Clasificación: ${classification}`, 15, y);
+  
+    // Guarda el PDF como archivo
+    const fileName = window.prompt('Nombre del archivo PDF', 'reporte');
+    if (fileName) {
+      doc.save(fileName + '.pdf');
+    }
+});
+
+  
 
 //SCRIPT DE LLENADO AUTOMATICO DEL FORMULARIO
 //COPIAR EN LA CONSOLA DEL NAVEGADOR Y EJECUTAR
