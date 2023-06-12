@@ -49,6 +49,7 @@ let options_secondary = [
     { value: 3, text: 'ALTO' },
     { value: 2, text: 'MEDIO' },
     { value: 1, text: 'BAJO' },
+    { value: 0, text: 'NO'}
 ];
 
 //Funcion para generar las preguntas
