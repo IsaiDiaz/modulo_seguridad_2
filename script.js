@@ -49,7 +49,7 @@ let options_secondary = [
     { value: 3, text: 'ALTO' },
     { value: 2, text: 'MEDIO' },
     { value: 1, text: 'BAJO' },
-    { value: 0, text: 'NO'}
+    { value: 0, text: 'NO' }
 ];
 
 //Funcion para generar las preguntas
@@ -270,18 +270,26 @@ document.getElementById('savePdfBtn').addEventListener('click', function () {
         const questionLines = doc.splitTextToSize(question, 180);
         const answerLines = doc.splitTextToSize(answer, 180);
 
-        confidentialityList.push(...questionLines, ...answerLines, ''); // Agregar líneas de pregunta, líneas de respuesta y una línea vacía para separación
-    }
+        // Verificar si es necesario agregar una nueva página para la respuesta
+        if (y + answerLines.length * 5 > doc.internal.pageSize.height - 10) {
+            doc.addPage();
+            y = 20; // Reiniciar la posición vertical para la nueva página
+        }
 
-    doc.text(confidentialityList, 10, y);
-    y += confidentialityList.length * 5;
+        confidentialityList.push(...questionLines, ''); // Agregar líneas de pregunta y una línea vacía para separación
+        doc.text(confidentialityList, 10, y);
+        y += confidentialityList.length * 5;
+
+        doc.text(answerLines, 25, y); // Agregar las líneas de respuesta
+        y += answerLines.length * 5;
+        confidentialityList.length = 0; // Limpiar la lista de preguntas para la siguiente iteración
+    }
 
     // Verificar si es necesario agregar una nueva página
     if (y > doc.internal.pageSize.height - 10) {
         doc.addPage();
         y = 20; // Reiniciar la posición vertical para la nueva página
     }
-
     doc.text('Disponibilidad:', 10, y);
     y += 10;
 
@@ -310,27 +318,30 @@ document.getElementById('savePdfBtn').addEventListener('click', function () {
 
     doc.text('Integridad:', 10, y);
     y += 10;
-
+    
     const integrityList = [];
     for (let i = 0; i < integrity_data.length; i++) {
-        const question = `Pregunta: ${integrity_data[i].question}`;
-        const answer = `Respuesta: ${options_main.find(option => option.value === integrity_scores[integrity_data[i].code]).text}`;
-
-        const questionLines = doc.splitTextToSize(question, 180);
-        const answerLines = doc.splitTextToSize(answer, 180);
-
-        integrityList.push(...questionLines, ...answerLines, ''); // Agregar líneas de pregunta, líneas de respuesta y una línea vacía para separación
-    }
-
-    doc.text(integrityList, 10, y);
-    y += integrityList.length * 5;
-
-    // Verificar si es necesario agregar una nueva página
-    if (y > doc.internal.pageSize.height - 10) {
+      const question = `Pregunta: ${integrity_data[i].question}`;
+      const answer = `Respuesta: ${options_main.find(option => option.value === integrity_scores[integrity_data[i].code]).text}`;
+    
+      const questionLines = doc.splitTextToSize(question, 180);
+      const answerLines = doc.splitTextToSize(answer, 180);
+    
+      // Verificar si es necesario agregar una nueva página para la respuesta
+      if (y + Math.max(questionLines.length, answerLines.length) * 5 > doc.internal.pageSize.height - 10) {
         doc.addPage();
         y = 20; // Reiniciar la posición vertical para la nueva página
+      }
+    
+      integrityList.push(...questionLines, ''); // Agregar líneas de pregunta y una línea vacía para separación
+      doc.text(integrityList, 10, y);
+      y += integrityList.length * 5;
+    
+      doc.text(answerLines, 25, y); // Agregar las líneas de respuesta
+      y += answerLines.length * 5;
+      integrityList.length = 0; // Limpiar la lista de preguntas para la siguiente iteración
     }
-
+    
     doc.text('Privacidad:', 10, y);
     y += 10;
 
@@ -342,17 +353,21 @@ document.getElementById('savePdfBtn').addEventListener('click', function () {
         const questionLines = doc.splitTextToSize(question, 180);
         const answerLines = doc.splitTextToSize(answer, 180);
 
-        privacyList.push(...questionLines, ...answerLines, ''); // Agregar líneas de pregunta, líneas de respuesta y una línea vacía para separación
+        // Verificar si es necesario agregar una nueva página para la respuesta
+        if (y + answerLines.length * 5 > doc.internal.pageSize.height - 10) {
+            doc.addPage();
+            y = 20; // Reiniciar la posición vertical para la nueva página
+        }
+
+        privacyList.push(...questionLines, ''); // Agregar líneas de pregunta y una línea vacía para separación
+        doc.text(privacyList, 10, y);
+        y += privacyList.length * 5;
+
+        doc.text(answerLines, 25, y); // Agregar las líneas de respuesta
+        y += answerLines.length * 5;
+        privacyList.length = 0; // Limpiar la lista de preguntas para la siguiente iteración
     }
 
-    doc.text(privacyList, 10, y);
-    y += privacyList.length * 5;
-
-    // Verificar si es necesario agregar una nueva página
-    if (y > doc.internal.pageSize.height - 10) {
-        doc.addPage();
-        y = 20; // Reiniciar la posición vertical para la nueva página
-    }
 
     doc.text('Clasificación Final:', 10, y);
     y += 10;
