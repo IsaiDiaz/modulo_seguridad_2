@@ -188,187 +188,181 @@ document.getElementById('classificationForm').addEventListener('submit', functio
 });
 
 document.getElementById('savePdfBtn').addEventListener('click', function () {
-    // Crea un nuevo objeto jsPDF
     const doc = new jsPDF();
 
-    // Carga dinámicamente el script jspdf-autotable
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js';
-    script.onload = function () {
-        // Espera a que la biblioteca se cargue completamente
-        setTimeout(function () {
-            // Opciones de estilo para las tablas
-            const tableOptions = {
-                theme: 'grid',
-                headerStyles: {
-                    fillColor: '#ADFF2F', // Cambia el color de fondo de las celdas del encabezado
-                    textColor: '#000000',
-                    fontSize: 12,
-                    fontStyle: 'bold',
-                },
-                bodyStyles: {
-                    fontSize: 10,
-                    fillColor: '#f3f4f9', 
-                },
-                alternateRowStyles: {
-                    fillColor: '#f3f4f9', 
-                },
-            };
+    // Cambiar la fuente a una más formal
+    doc.setFont('times');
 
-            // Agrega el título del formulario al PDF
-            doc.setFontSize(18);
-            doc.text('Formulario de Clasificación de Activos de Información', 10, 10);
-
-            // Valor de desplazamiento vertical inicial
-            let y = 20;
-
-            // Agrega el nombre del sistema al PDF, propietario y autorizador
-            doc.setFontSize(12);
-
-            // Sistema
-            doc.text('Sistema:', 10, y);
-            y += 10; 
-            const systemTextLines = doc.splitTextToSize(document.getElementById('system').value, 180);
-            for (let i = 0; i < systemTextLines.length; i++) {
-                doc.text(systemTextLines[i], 25, y);
-                y += 5; // Aumenta el desplazamiento vertical para la siguiente línea
-            }
-
-            // Propietario
-            doc.text('Propietario:', 10, y);
-            y += 10; 
-            const ownerTextLines = doc.splitTextToSize(document.getElementById('owner').value, 180);
-            for (let i = 0; i < ownerTextLines.length; i++) {
-                doc.text(ownerTextLines[i], 25, y);
-                y += 5; // Aumenta el desplazamiento vertical para la siguiente línea
-            }
-
-            // Autorizador
-            doc.text('Autorizador:', 10, y);
-            y += 10; 
-            const authorizerTextLines = doc.splitTextToSize(document.getElementById('authorizer').value, 180);
-            for (let i = 0; i < authorizerTextLines.length; i++) {
-                doc.text(authorizerTextLines[i], 25, y);
-                y += 5; // Aumenta el desplazamiento vertical para la siguiente línea
-            }
-
-            // Obtiene las respuestas y clasificación del formulario
-            const confidentiality_scores = getScores(confidentiality_data);
-            const availability_scores = getScores(availability_data);
-            const integrity_scores = getScores(integrity_data);
-            const privacy_scores = getScores(privacy_data);
-            const classification = document.getElementById('final_classification').innerText;
-
-            // Agrega las respuestas y clasificación al PDF
-            doc.setFontSize(12);
-
-            // Confidencialidad
-            doc.text('Confidencialidad:', 10, y);
-            y += 10; // Aumenta el desplazamiento vertical
-
-            const confidentialityColumns = [
-                { header: 'Pregunta', dataKey: 'question' },
-                { header: 'Respuesta', dataKey: 'answer' },
-            ];
-
-            const confidentialityRows = confidentiality_data.map(function (item) {
-                return {
-                    question: item.question,
-                    answer: options_main.find(option => option.value === confidentiality_scores[item.code]).text,
-                };
-            });
-
-            doc.autoTable(confidentialityColumns, confidentialityRows, {
-                ...tableOptions,
-                startY: y,
-            });
-
-            y = doc.lastAutoTable.finalY + 10;
-
-            // Disponibilidad
-            doc.text('Disponibilidad:', 10, y);
-            y += 10; // Aumenta el desplazamiento vertical
-
-            const availabilityColumns = [
-                { header: 'Pregunta', dataKey: 'question' },
-                { header: 'Respuesta', dataKey: 'answer' },
-            ];
-
-            const availabilityRows = availability_data.map(function (item) {
-                return {
-                    question: item.question,
-                    answer: options_main.find(option => option.value === availability_scores[item.code]).text,
-                };
-            });
-
-            doc.autoTable(availabilityColumns, availabilityRows, {
-                ...tableOptions,
-                startY: y,
-            });
-
-            y = doc.lastAutoTable.finalY + 10;
-
-            // Integridad
-            doc.text('Integridad:', 10, y);
-            y += 10; // Aumenta el desplazamiento vertical
-
-            const integrityColumns = [
-                { header: 'Pregunta', dataKey: 'question' },
-                { header: 'Respuesta', dataKey: 'answer' },
-            ];
-
-            const integrityRows = integrity_data.map(function (item) {
-                return {
-                    question: item.question,
-                    answer: options_main.find(option => option.value === integrity_scores[item.code]).text,
-                };
-            });
-
-            doc.autoTable(integrityColumns, integrityRows, {
-                ...tableOptions,
-                startY: y,
-            });
-
-            y = doc.lastAutoTable.finalY + 10;
-
-            // Privacidad
-            doc.text('Privacidad:', 10, y);
-            y += 10; // Aumenta el desplazamiento vertical
-
-            const privacyColumns = [
-                { header: 'Pregunta', dataKey: 'question' },
-                { header: 'Respuesta', dataKey: 'answer' },
-            ];
-
-            const privacyRows = privacy_data.map(function (item) {
-                return {
-                    question: item.question,
-                    answer: options_secondary.find(option => option.value === privacy_scores[item.code]).text,
-                };
-            });
-
-            doc.autoTable(privacyColumns, privacyRows, {
-                ...tableOptions,
-                startY: y,
-            });
-
-            y = doc.lastAutoTable.finalY + 10;
-
-            // Clasificación final
-            doc.text('Clasificación Final:', 10, y);
-            y += 10; // Aumenta el desplazamiento vertical
-            doc.text(`Clasificación: ${classification}`, 15, y);
-
-            // Guarda el PDF como archivo
-            const fileName = window.prompt('Nombre del archivo PDF', 'reporte');
-            if (fileName) {
-                doc.save(fileName + '.pdf');
-            }
-        }, 100); // Ajusta este tiempo de espera según sea necesario
+    const tableOptions = {
+        theme: 'striped',
+        headerStyles: {
+            fillColor: '#ADFF2F',
+            textColor: '#000000',
+            fontSize: 12,
+            fontStyle: 'bold',
+        },
+        bodyStyles: {
+            fontSize: 10,
+            fillColor: '#f3f4f9',
+        },
+        alternateRowStyles: {
+            fillColor: '#f3f4f9',
+        },
     };
 
-    document.head.appendChild(script);
+    // Agrega el título del formulario al PDF
+    doc.setFontSize(18);
+    doc.text('Formulario de Clasificación de Activos de Información', 10, 10);
+
+    let y = 20;
+
+    // Agrega el nombre del sistema al PDF, propietario y autorizador
+    doc.setFontSize(12);
+
+    doc.text('Sistema:', 10, y);
+    y += 5;
+    const systemTextLines = doc.splitTextToSize(document.getElementById('system').value, 180);
+    for (let i = 0; i < systemTextLines.length; i++) {
+        doc.text(systemTextLines[i], 25, y);
+        y += 5;
+    }
+
+    doc.text('Propietario:', 10, y);
+    y += 5;
+    const ownerTextLines = doc.splitTextToSize(document.getElementById('owner').value, 180);
+    for (let i = 0; i < ownerTextLines.length; i++) {
+        doc.text(ownerTextLines[i], 25, y);
+        y += 5;
+    }
+
+    doc.text('Autorizador:', 10, y);
+    y += 5;
+    const authorizerTextLines = doc.splitTextToSize(document.getElementById('authorizer').value, 180);
+    for (let i = 0; i < authorizerTextLines.length; i++) {
+        doc.text(authorizerTextLines[i], 25, y);
+        y += 5;
+    }
+
+    doc.text('Descripción del sistema:', 10, y);
+    y += 10;
+    const descriptionTextLines = doc.splitTextToSize(document.getElementById('description').value, 180);
+    for (let i = 0; i < descriptionTextLines.length; i++) {
+        doc.text(descriptionTextLines[i], 25, y);
+        y += 5;
+    }
+
+    const confidentiality_scores = getScores(confidentiality_data);
+    const availability_scores = getScores(availability_data);
+    const integrity_scores = getScores(integrity_data);
+    const privacy_scores = getScores(privacy_data);
+    const classification = document.getElementById('final_classification').innerText;
+
+    doc.setFontSize(12);
+
+    doc.text('Confidencialidad:', 10, y);
+    y += 10;
+
+    const confidentialityList = [];
+    for (let i = 0; i < confidentiality_data.length; i++) {
+        const question = `Pregunta: ${confidentiality_data[i].question}`;
+        const answer = `Respuesta: ${options_main.find(option => option.value === confidentiality_scores[confidentiality_data[i].code]).text}`;
+
+        const questionLines = doc.splitTextToSize(question, 180);
+        const answerLines = doc.splitTextToSize(answer, 180);
+
+        confidentialityList.push(...questionLines, ...answerLines, ''); // Agregar líneas de pregunta, líneas de respuesta y una línea vacía para separación
+    }
+
+    doc.text(confidentialityList, 10, y);
+    y += confidentialityList.length * 5;
+
+    // Verificar si es necesario agregar una nueva página
+    if (y > doc.internal.pageSize.height - 10) {
+        doc.addPage();
+        y = 20; // Reiniciar la posición vertical para la nueva página
+    }
+
+    doc.text('Disponibilidad:', 10, y);
+    y += 10;
+
+    const availabilityList = [];
+    for (let i = 0; i < availability_data.length; i++) {
+        const question = `Pregunta: ${availability_data[i].question}`;
+        const answer = `Respuesta: ${options_main.find(option => option.value === availability_scores[availability_data[i].code]).text}`;
+
+        const questionLines = doc.splitTextToSize(question, 180);
+        const answerLines = doc.splitTextToSize(answer, 180);
+
+        // Verificar si es necesario agregar una nueva página para la respuesta
+        if (y + answerLines.length * 5 > doc.internal.pageSize.height - 10) {
+            doc.addPage();
+            y = 20; // Reiniciar la posición vertical para la nueva página
+        }
+
+        availabilityList.push(...questionLines, ''); // Agregar líneas de pregunta y una línea vacía para separación
+        doc.text(availabilityList, 10, y);
+        y += availabilityList.length * 5;
+
+        doc.text(answerLines, 25, y); // Agregar las líneas de respuesta
+        y += answerLines.length * 5;
+        availabilityList.length = 0; // Limpiar la lista de preguntas para la siguiente iteración
+    }
+
+    doc.text('Integridad:', 10, y);
+    y += 10;
+
+    const integrityList = [];
+    for (let i = 0; i < integrity_data.length; i++) {
+        const question = `Pregunta: ${integrity_data[i].question}`;
+        const answer = `Respuesta: ${options_main.find(option => option.value === integrity_scores[integrity_data[i].code]).text}`;
+
+        const questionLines = doc.splitTextToSize(question, 180);
+        const answerLines = doc.splitTextToSize(answer, 180);
+
+        integrityList.push(...questionLines, ...answerLines, ''); // Agregar líneas de pregunta, líneas de respuesta y una línea vacía para separación
+    }
+
+    doc.text(integrityList, 10, y);
+    y += integrityList.length * 5;
+
+    // Verificar si es necesario agregar una nueva página
+    if (y > doc.internal.pageSize.height - 10) {
+        doc.addPage();
+        y = 20; // Reiniciar la posición vertical para la nueva página
+    }
+
+    doc.text('Privacidad:', 10, y);
+    y += 10;
+
+    const privacyList = [];
+    for (let i = 0; i < privacy_data.length; i++) {
+        const question = `Pregunta: ${privacy_data[i].question}`;
+        const answer = `Respuesta: ${options_secondary.find(option => option.value === privacy_scores[privacy_data[i].code]).text}`;
+
+        const questionLines = doc.splitTextToSize(question, 180);
+        const answerLines = doc.splitTextToSize(answer, 180);
+
+        privacyList.push(...questionLines, ...answerLines, ''); // Agregar líneas de pregunta, líneas de respuesta y una línea vacía para separación
+    }
+
+    doc.text(privacyList, 10, y);
+    y += privacyList.length * 5;
+
+    // Verificar si es necesario agregar una nueva página
+    if (y > doc.internal.pageSize.height - 10) {
+        doc.addPage();
+        y = 20; // Reiniciar la posición vertical para la nueva página
+    }
+
+    doc.text('Clasificación Final:', 10, y);
+    y += 10;
+    doc.text(`Clasificación: ${classification}`, 15, y);
+
+    const systemName = document.getElementById('system').value;
+    const fileName = `Reporte (${systemName})`;
+    doc.save(fileName + '.pdf');
 });
+
 
 
 
